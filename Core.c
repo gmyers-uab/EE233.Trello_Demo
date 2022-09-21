@@ -10,7 +10,7 @@
 #include <string.h>
 
 #include "trello.h"
-#include "string_functions.h"
+#include "Core.h"
 
 int file_read_line(FILE *input, char line[]) {
     char chunk;

@@ -8,58 +8,58 @@
 #ifndef TRELLO_H
 #define TRELLO_H
 
-#define board_count_max 5
+#define list_count_max 8
 #define card_count_max 100
 #define user_count_max 10
 
 typedef enum {
-    backlog, design, build, test, done, abandon, unknown
-} card_states;
+    low, medium, high, unknown
+} priority_level;
 
 typedef struct {
-    int b_id;
-    char b_desc[50];
-    int b_cards[20];
-} board_type;
+    int list_id;
+    char list_desc[50];
+    int list_cards[20];
+} list_type;
 
 typedef struct {
-    int c_id;
-    char c_desc[50];
-    card_states c_state;
-    int c_users[4];
+    int card_id;
+    char card_desc[50];
+    priority_level card_priority;
+    int card_users[4];
 } card_type;
 
 typedef struct {
-    int u_id;
-    char username[20];
-    int u_level;
+    int user_id;
+    char user_name[20];
+    int user_level;
 } user_type;
 
 void help(void);
 
-int import_boards(board_type boards[], int *index);
-int export_boards(char const filename[], board_type boards[], int index);
-int add_board(board_type boards[], int id, char desc[], int index);
-int update_board(board_type boards[], int id, char desc[], int index);
-int archive_board(board_type boards[], int id, int *count);
-void display_board(board_type boards[], int id);
-int add_card_to_board(board_type boards[], int index, int b_id, int c_id);
-int remove_card_from_board(board_type boards[], int index, int b_id, int c_id);
+int import_lists(list_type lists[], int *index);
+int export_lists(char const filename[], list_type lists[], int index);
+int add_list(list_type lists[], int index, int id, char desc[]);
+int update_list(list_type lists[], int index, int id, char desc[]);
+int archive_list(list_type lists[], int *index, int id);
+void display_list(list_type lists[], int id);
+int add_card_to_list(list_type lists[], int index, int b_id, int c_id);
+int remove_card_from_list(list_type lists[], int index, int b_id, int c_id);
 
 int import_cards(card_type cards[], int *index);
 int export_cards(char const filename[], card_type cards[], int index);
-int add_card(card_type cards[], int index, int board, int id, char desc[], int user, card_states state);
-int update_card(card_type cards[], int index, int id, char desc[], int user, card_states state);
-int archive_card(card_type cards[], int id, int *index);
+int add_card(card_type cards[], int index, int list, int id, char desc[], int user, priority_level priority);
+int update_card(card_type cards[], int index, int id, char desc[], int user, priority_level priority);
+int archive_card(card_type cards[], int *index, int id);
 void display_card(card_type cards[], int id);
 int add_user_to_card(card_type cards[], int index, int c_id, int u_id);
 int remove_user_from_card(card_type cards[], int index, int c_id, int u_id);
 
 int import_users(user_type users[], int *index);
 int export_users(char const filename[], user_type users[], int index);
-int add_user(user_type users[], int id, char name[], int index);
-int update_user(user_type users[], int id, char name[], int index);
-int archive_user(user_type users[], int id, int *index);
+int add_user(user_type users[], int index, int id, char name[]);
+int update_user(user_type users[], int index, int id, char name[]);
+int archive_user(user_type users[], int *index, int id);
 
 #endif /* TRELLO_H */
 

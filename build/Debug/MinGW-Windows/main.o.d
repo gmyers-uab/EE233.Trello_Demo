@@ -1,5 +1,5 @@
-build/Debug/MinGW-Windows/main.o: main.c trello.h string_functions.h
+build/Debug/MinGW-Windows/main.o: main.c trello.h Core.h
 
 trello.h:
 
-string_functions.h:
+Core.h:

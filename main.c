@@ -3,7 +3,7 @@
  * Copy: Copyright (c) 2022 Josh McDowell
  * BlazerID: joshmc
  * Vers: 1.0.0 15/09/2022 JKM - Original Coding
- * Desc: Driver for trello demo
+ * Desc: Driver for EE233: Trello Demo
  */ 
 
 #include <stdio.h>
@@ -34,10 +34,15 @@ int main(int argc, char** argv) {
     import_cards(cards, &cards_index);
     import_users(users, &users_index);
     
+    printf("lists_index = %i\n", lists_index);
+    printf("cards_index = %i\n", cards_index);
+    printf("users_index = %i\n", users_index);
+    
     printf("Argument count: %d\n", argc );
     for (index = 0; index < argc; index++) {
         printf("argv[ %d ]: %s\n", index, argv[ index ]);
-    } 
+    }
+    printf("\n");
     
     if(argc < 2) {
         help();
@@ -67,7 +72,7 @@ int main(int argc, char** argv) {
             printf("Removing card from list\n");
             results = remove_card_from_list(lists, lists_index, atoi(argv[3]), atoi(argv[4]));
         } else if ((argc == 6) && (strcmpi(argv[2], "/movecard") == 0)) {
-            printf("Moving card from b_id_1 to b_id_2");
+            printf("Moving card from list_id_1 to list_id_2");
             results = add_card_to_list(lists, lists_index, atoi(argv[4]), atoi(argv[5]));
             results = remove_card_from_list(lists, lists_index, atoi(argv[3]), atoi(argv[5]));
         } else if ((argc == 4) && (strcmpi(argv[2], "/archive") == 0)) {
@@ -75,7 +80,7 @@ int main(int argc, char** argv) {
             results = archive_list(lists, &lists_index, atoi(argv[3]));
         } else if ((argc == 4) && (strcmpi(argv[2], "/display") == 0)) {
             printf("Displaying list\n");
-            display_list(lists, atoi(argv[3]));
+            display_list(lists, cards, users, atoi(argv[3]));
         } else {
             printf("Incorrect arguments. Displaying help.\n");
             help();
@@ -109,7 +114,7 @@ int main(int argc, char** argv) {
             printf("Removing user from card\n");
             results = remove_user_from_card(cards, cards_index, atoi(argv[3]), atoi(argv[4]));
         } else if ((argc == 6) && (strcmpi(argv[2], "/moveuser") == 0)) {
-            printf("Moving user from c_id_1 to c_id_2\n");
+            printf("Moving user from card_id_1 to card_id_2\n");
             results = add_user_to_card(cards, cards_index, atoi(argv[4]), atoi(argv[5]));
             results = remove_user_from_card(cards, cards_index, atoi(argv[3]), atoi(argv[5]));
         } else if ((argc == 4) && (strcmpi(argv[2], "/archive") == 0)) {
@@ -117,7 +122,7 @@ int main(int argc, char** argv) {
             results = archive_card(cards, &cards_index, atoi(argv[3]));
         } else if ((argc == 4) && (strcmpi(argv[2], "/display") == 0)) {
             printf("Display card\n");
-            display_card(cards, atoi(argv[3]));
+            display_card(cards, users, atoi(argv[3]));
         } else {
             printf("Incorrect arguments. Displaying help.\n");
             help();

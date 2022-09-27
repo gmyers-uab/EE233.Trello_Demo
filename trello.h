@@ -42,7 +42,7 @@ int export_lists(char const filename[], list_type lists[], int index);
 int add_list(list_type lists[], int index, int id, char desc[]);
 int update_list(list_type lists[], int index, int id, char desc[]);
 int archive_list(list_type lists[], int *index, int id);
-void display_list(list_type lists[], int id);
+void display_list(list_type lists[], card_type cards[], user_type users[], int id);
 int add_card_to_list(list_type lists[], int index, int b_id, int c_id);
 int remove_card_from_list(list_type lists[], int index, int b_id, int c_id);
 
@@ -51,7 +51,7 @@ int export_cards(char const filename[], card_type cards[], int index);
 int add_card(card_type cards[], int index, int id, char desc[], int user, priority_level priority);
 int update_card(card_type cards[], int index, int id, char desc[], priority_level priority);
 int archive_card(card_type cards[], int *index, int id);
-void display_card(card_type cards[], int id);
+void display_card(card_type cards[], user_type users[], int id);
 int add_user_to_card(card_type cards[], int index, int c_id, int u_id);
 int remove_user_from_card(card_type cards[], int index, int c_id, int u_id);
 
@@ -60,6 +60,7 @@ int export_users(char const filename[], user_type users[], int index);
 int add_user(user_type users[], int index, int id, char name[]);
 int update_user(user_type users[], int index, int id, char name[]);
 int archive_user(user_type users[], int *index, int id);
+void display_user(user_type users[], int id);
 
 #endif /* TRELLO_H */
 

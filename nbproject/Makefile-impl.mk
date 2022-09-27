@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Trello_C
+PROJECTNAME=Trello_Demo
 
 # Active Configuration
 DEFAULTCONF=Debug

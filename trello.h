@@ -48,8 +48,8 @@ int remove_card_from_list(list_type lists[], int index, int b_id, int c_id);
 
 int import_cards(card_type cards[], int *index);
 int export_cards(char const filename[], card_type cards[], int index);
-int add_card(card_type cards[], int index, int list, int id, char desc[], int user, priority_level priority);
-int update_card(card_type cards[], int index, int id, char desc[], int user, priority_level priority);
+int add_card(card_type cards[], int index, int id, char desc[], int user, priority_level priority);
+int update_card(card_type cards[], int index, int id, char desc[], priority_level priority);
 int archive_card(card_type cards[], int *index, int id);
 void display_card(card_type cards[], int id);
 int add_user_to_card(card_type cards[], int index, int c_id, int u_id);

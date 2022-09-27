@@ -272,7 +272,7 @@ int add_card_to_list(list_type lists[], int index, int list_id, int card_id) {
     lists[list_loc].list_cards[card_count] = card_id;
     lists[list_loc].list_cards[card_count + 1] = 0; 
     
-    export_lists("Boards.csv", lists, index);
+    export_lists("Lists.csv", lists, index);
     
     return EXIT_SUCCESS;
 }
@@ -308,7 +308,7 @@ int remove_card_from_list(list_type lists[], int index, int list_id, int card_id
         lists[list_loc].list_cards[fix] = lists[list_loc].list_cards[fix + 1];
     }
     
-    export_lists("Boards.csv", lists, index);
+    export_lists("Lists.csv", lists, index);
     
     return EXIT_SUCCESS;
 }
@@ -429,7 +429,7 @@ int export_cards(char const filename[], card_type cards[], int index) {
  *  priority_level priority - priority of the new card
  *  return - failure or success
  */
-int add_card(card_type cards[], int index, int list, int id, char desc[], int user, priority_level priority) {
+int add_card(card_type cards[], int index, int id, char desc[], int user, priority_level priority) {
     char const filename[] = "Cards.csv";
     FILE *output;
     int card_iter;
@@ -439,9 +439,6 @@ int add_card(card_type cards[], int index, int list, int id, char desc[], int us
         return EXIT_FAILURE;
     } else if (index > card_count_max) {
         printf("Error: Maximum amount of cards created\n");
-        return EXIT_FAILURE;
-    } else if (list == 0) {
-        printf("Error: invalid list ID provided\n");
         return EXIT_FAILURE;
     }
     
@@ -496,7 +493,7 @@ int add_card(card_type cards[], int index, int list, int id, char desc[], int us
  *  priority_level priority - new priority of the card
  *  return - failure or success
  */
-int update_card(card_type cards[], int index, int id, char desc[], int user, priority_level priority) {
+int update_card(card_type cards[], int index, int id, char desc[], priority_level priority) {
     int i = 0;
     while (id != cards[i].card_id) {
         i++;
@@ -506,25 +503,8 @@ int update_card(card_type cards[], int index, int id, char desc[], int user, pri
         strcpy(cards[i].card_desc, desc);
     }
     
-    if (user != 0) {
-        cards[i].card_users[0] = user;
-    }
-    
-    if (priority != 0) {
-        switch((int)priority) {
-            case 0:
-                cards[i].card_priority = low;
-                break;
-            case 1:
-                cards[i].card_priority = medium;
-                break;
-            case 2:
-                cards[i].card_priority = high;
-                break;
-            default:
-                cards[i].card_priority = unknown;
-                break;
-        }
+    if (priority != -1) {
+        cards[i].card_priority = priority;
     }
     
     export_cards("Cards.csv", cards, index);

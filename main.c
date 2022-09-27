@@ -47,13 +47,21 @@ int main(int argc, char** argv) {
         help();
     } else if ((argc >= 4) && (strcmpi(argv[1], "/list") == 0)) {
         if((argc == 4) && (strcmpi(argv[2], "/add") == 0)) {
-            printf("Creating new list, auto b_id\n");
+            printf("Creating new list, auto list_id\n");
             results = add_list(lists, lists_index, 0, argv[3]);
         } else if((argc == 5) && (strcmpi(argv[2], "/add") == 0)) {
             printf("Creating new list\n");
             results = add_list(lists, lists_index, atoi(argv[3]), argv[4]);
+        } else if ((argc == 5) && (strcmpi(argv[2], "/update") == 0)) {
+            printf("Update existing list description\n");
+            results = update_list(lists, lists_index, atoi(argv[3]), argv[4]);
         } else if ((argc == 5) && (strcmpi(argv[2], "/addcard") == 0)) {
+            printf("Adding card to list, auto card_id\n");
+            int newID = add_card(cards, cards_index, 0, argv[4], 0, low);
+            results = add_card_to_list(lists, lists_index, atoi(argv[3]), newID);
+        } else if((argc == 6) && (strcmpi(argv[2], "/addcard") == 0)) {
             printf("Adding card to list\n");
+            results = add_card(cards, cards_index, atoi(argv[4]), argv[5], 0, low);
             results = add_card_to_list(lists, lists_index, atoi(argv[3]), atoi(argv[4]));
         } else if ((argc == 5) && (strcmpi(argv[2], "/removecard") == 0)) {
             printf("Removing card from list\n");
@@ -62,9 +70,6 @@ int main(int argc, char** argv) {
             printf("Moving card from b_id_1 to b_id_2");
             results = add_card_to_list(lists, lists_index, atoi(argv[4]), atoi(argv[5]));
             results = remove_card_from_list(lists, lists_index, atoi(argv[3]), atoi(argv[5]));
-        } else if ((argc == 5) && (strcmpi(argv[2], "/update") == 0)) {
-            printf("Update existing list description\n");
-            results = update_list(lists, lists_index, atoi(argv[3]), argv[4]);
         } else if ((argc == 4) && (strcmpi(argv[2], "/archive") == 0)) {
             printf("Archive list\n");
             results = archive_list(lists, &lists_index, atoi(argv[3]));
@@ -75,61 +80,51 @@ int main(int argc, char** argv) {
             printf("Incorrect arguments. Displaying help.\n");
             help();
         }
-    } else if ((argc >= 5) && (strcmpi(argv[1], "/card") == 0)) {
-        if(strcmpi(argv[2], "/add") == 0) {
-            if(argc == 5) {
-                printf("Add new card, auto c_id, auto u_id\n");
-                int newID = add_card(cards, cards_index, atoi(argv[3]), 0, argv[4], 0, low);
-                results = add_card_to_list(lists, lists_index, atoi(argv[3]), newID);
-            } else if (argc == 6) {
-                printf("Add new card, auto c_id\n");
-                int newID = add_card(cards, cards_index, atoi(argv[3]), 0, argv[5], atoi(argv[4]), low);
-                results = add_card_to_list(lists, lists_index, atoi(argv[3]), newID);
-            } else if (argc == 7) {
-                printf("Add new card\n");
-                int newID = add_card(cards, cards_index, atoi(argv[3]), atoi(argv[5]), argv[6], atoi(argv[4]), low);
-                results = add_card_to_list(lists, lists_index, atoi(argv[3]), newID);
+    } else if ((argc >= 4) && (strcmpi(argv[1], "/card") == 0)) {
+        if((argc == 6) && (strcmpi(argv[2], "/update") == 0)) {
+            if (strcmpi(argv[3], "/desc") == 0) {
+                printf("Update description of the card\n");
+                results = update_card(cards, cards_index, atoi(argv[4]), argv[5], -1);
+            } else if (strcmpi(argv[3], "/priority") == 0) {
+                printf("Update priority of the card\n");
+                priority_level new_priority = -1;
+                if (strcmpi(argv[5], "low") == 0) {
+                    new_priority = low;
+                } else if (strcmpi(argv[5], "medium") == 0) {
+                    new_priority = medium;
+                } else if (strcmpi(argv[5], "high") == 0) {
+                    new_priority = high;
+                } else {
+                    printf("Invalid priority level.\n");
+                }
+                results = update_card(cards, cards_index, atoi(argv[4]), " ", new_priority);
             } else {
                 printf("Incorrect arguments. Displaying help.\n");
                 help();
             }
-        } else if ((argc == 6) && (strcmpi(argv[2], "/adduser") == 0)) {
+        } else if ((argc == 5) && (strcmpi(argv[2], "/adduser") == 0)) {
             printf("Adding user to card\n");
-            results = add_user_to_card(cards, cards_index, atoi(argv[4]), atoi(argv[5]));
-        } else if ((argc == 6) && (strcmpi(argv[2], "/removeuser") == 0)) {
+            results = add_user_to_card(cards, cards_index, atoi(argv[3]), atoi(argv[4]));
+        } else if ((argc == 5) && (strcmpi(argv[2], "/removeuser") == 0)) {
             printf("Removing user from card\n");
-            results = remove_user_from_card(cards, cards_index, atoi(argv[4]), atoi(argv[5]));
-        } else if ((argc == 7) && (strcmpi(argv[2], "/moveuser") == 0)) {
+            results = remove_user_from_card(cards, cards_index, atoi(argv[3]), atoi(argv[4]));
+        } else if ((argc == 6) && (strcmpi(argv[2], "/moveuser") == 0)) {
             printf("Moving user from c_id_1 to c_id_2\n");
-            results = add_user_to_card(cards, cards_index, atoi(argv[5]), atoi(argv[6]));
-            results = remove_user_from_card(cards, cards_index, atoi(argv[4]), atoi(argv[6]));
-        } else if ((argc == 7) && (strcmpi(argv[2], "/update") == 0)) {
-            if(strcmpi(argv[3], "/desc") == 0) {
-                printf("Update description of card\n");
-                results = update_card(cards, cards_index, atoi(argv[5]), argv[6], 0, 0);
-            } else if (strcmpi(argv[3], "/state") == 0) {
-                printf("Update state of the card\n");
-                results = update_card(cards, cards_index, atoi(argv[5]), " ", 0, atoi(argv[6]));
-            } else if (strcmpi(argv[3], "/user") == 0) {
-                printf("Update user of the card\n");
-                results = update_card(cards, cards_index, atoi(argv[5]), " ", atoi(argv[6]), 0);
-            } else {
-                printf("Incorrect arguments. Displaying help.\n");
-                help();
-            }
-        } else if ((argc == 5) && (strcmpi(argv[2], "/archive") == 0)) {
+            results = add_user_to_card(cards, cards_index, atoi(argv[4]), atoi(argv[5]));
+            results = remove_user_from_card(cards, cards_index, atoi(argv[3]), atoi(argv[5]));
+        } else if ((argc == 4) && (strcmpi(argv[2], "/archive") == 0)) {
             printf("Archive card\n");
-            results = archive_card(cards, &cards_index, atoi(argv[4]));
-        } else if ((argc == 5) && (strcmpi(argv[2], "/display") == 0)) {
+            results = archive_card(cards, &cards_index, atoi(argv[3]));
+        } else if ((argc == 4) && (strcmpi(argv[2], "/display") == 0)) {
             printf("Display card\n");
-            display_card(cards, atoi(argv[4]));
+            display_card(cards, atoi(argv[3]));
         } else {
             printf("Incorrect arguments. Displaying help.\n");
             help();
         }
     } else if ((argc >= 4) && (strcmpi(argv[1], "/user") == 0)) {
         if((argc == 4) && (strcmpi(argv[2], "/add") == 0)) {
-            printf("Add new user, auto u_id\n");
+            printf("Add new user, auto user_id\n");
             results = add_user(users, users_index, 0, argv[3]);
         } else if ((argc == 5) && (strcmpi(argv[2], "/add") == 0)) {
             printf("Add new user\n");
@@ -137,7 +132,7 @@ int main(int argc, char** argv) {
         } else if ((argc == 5) && (strcmpi(argv[2], "/update") == 0)) {
             printf("Update user info\n");
             results = update_user(users, users_index, atoi(argv[3]), argv[4]);
-        } else if ((argc == 5) && (strcmpi(argv[2], "/archive") == 0)) {
+        } else if ((argc == 4) && (strcmpi(argv[2], "/archive") == 0)) {
             printf("Archive user\n");
             results = archive_user(users, &users_index, atoi(argv[3]));
         } else {
@@ -162,27 +157,27 @@ void help(void) {
     printf("\nUsage:\n");
     printf("    /list /add list_desc\n");
     printf("    /list /add list_id list_desc\n");
-    printf("    /list /addcard list_id card_id\n");
+    printf("    /list /update list_id list_desc\n");
+    printf("    /list /addcard list_id card_desc\n");
+    printf("    /list /addcard list_id card_id card_desc\n");
     printf("    /list /removecard list_id card_id\n");
     printf("    /list /movecard list_id_1 list_id_2 card_id\n");
-    printf("    /list /update list_id list_desc\n");
     printf("    /list /archive list_id\n");
     printf("    /list /display list_id\n");
-    printf("    /card /add list_id card_desc\n");
-    printf("    /card /add list_id user_id card_desc\n");
-    printf("    /card /add list_id user_id card_id card_desc\n");
-    printf("    /card /adduser list_id card_id user_id\n");
-    printf("    /card /removeuser list_id card_id user_id\n");
-    printf("    /card /moveuser list_id card_id_1 card_id_2 user_id\n");
-    printf("    /card /update /desc list_id card_id card_desc\n");
-    printf("    /card /update /priority list_id card_id priority\n");
-    printf("    /card /update /user list_id card_id user_id\n");
-    printf("    /card /archive list_id card_id\n");
-    printf("    /card /display list_id card_id\n");
+    
+    printf("    /card /update /desc card_id card_desc\n");
+    printf("    /card /update /priority card_id priority_level\n");
+    printf("    /card /adduser card_id user_id\n");
+    printf("    /card /removeuser card_id user_id\n");
+    printf("    /card /moveuser card_id_1 card_id_2 user_id\n");
+    printf("    /card /archive card_id\n");
+    printf("    /card /display card_id\n");
+    
     printf("    /user /add user_name\n");
     printf("    /user /add user_id user_name\n");
     printf("    /user /update user_id user_name\n");
-    printf("    /user /archive user_id user_name\n");
+    printf("    /user /archive user_id\n");
+    
     printf("    /h\n");
     printf("    /?\n");
 }

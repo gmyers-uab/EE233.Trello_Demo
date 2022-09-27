@@ -427,7 +427,7 @@ int export_cards(char const filename[], card_type cards[], int index) {
  *  char desc[] - card description
  *  int user - user ID to be added to the card
  *  priority_level priority - priority of the new card
- *  return - failure or success
+ *  return - ID of the card that was just added (might have been auto-generated)
  */
 int add_card(card_type cards[], int index, int id, char desc[], int user, priority_level priority) {
     char const filename[] = "Cards.csv";

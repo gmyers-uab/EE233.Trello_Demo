@@ -246,7 +246,7 @@ int archive_list(list_type lists[], int *index, int id) {
  *  user_type users[] - array of struct user_type
  *  int id - ID of list to be displayed
  */
-void display_list(list_type lists[], card_type cards[], user_type users[], int id) {
+void display_list(list_type lists[], int id) {
     int list_index = 0;
     int card_index = 0;
     while (id != lists[list_index].list_id) {
@@ -256,15 +256,33 @@ void display_list(list_type lists[], card_type cards[], user_type users[], int i
             return;
         }
     }
-    printf("\n===========================================\n");
+    
     printf("List ID:       %d\n", lists[list_index].list_id);
     printf("List Desc:     %s\n", lists[list_index].list_desc);
+}
+
+/* 
+ * Name: get_list_cards(list_type lists[], int id, int list_cards[])
+ * Desc: Updates the array list_cards with the Card IDs for a particular list
+ * Args:
+ *  list_type lists[] - array of struct list_type
+ *  int id - ID of list
+ *  int list_cards[] - array to contain all IDs of cards on list
+ *  return - number of cards on list
+ */
+int get_list_cards(list_type lists[], int id, int list_cards[]) {
+    int list_index = 0;
+    while (id != lists[list_index].list_id) {
+        list_index++;
+    }
+    
+    int card_index = 0;
     while (lists[list_index].list_cards[card_index] != 0) {
-        printf("-------------------------------------------\n");
-        display_card(cards, users, lists[list_index].list_cards[card_index]);
+        list_cards[card_index] = lists[list_index].list_cards[card_index];
         card_index++;
     }
-    printf("===========================================\n");
+    
+    return( card_index );
 }
 
 /* 
@@ -601,7 +619,7 @@ int archive_card(card_type cards[], int *index, int id) {
  *  user_type users[] - array of struct user_type
  *  int id - ID of card to be displayed
  */
-void display_card(card_type cards[], user_type users[], int id) {
+void display_card(card_type cards[], int id) {
     int card_index = 0;
     while (id != cards[card_index].card_id) {
         card_index++;
@@ -622,14 +640,33 @@ void display_card(card_type cards[], user_type users[], int id) {
         case unknown: strcpy(priority, "unknown"); break;
     }
     printf("Card State:     %s\n", priority);
-    int user_index = 0;
-    while (cards[card_index].card_users[user_index] != 0) {
-        printf("\nUsers:\n");
-        display_user(users, cards[card_index].card_users[user_index]);
-        user_index++;
-    }
     printf("\n");
 }
+
+/* 
+ * Name: get_card_users(card_type cards[], int id, int card_users[])
+ * Desc: Updates the array card_users with the User IDs for a particular card
+ * Args:
+ *  card_type cards[] - array of struct card_type
+ *  int id - ID of card
+ *  int card_users[] - array to contain all IDs of users on card
+ *  return - number of users on card
+ */
+int get_card_users(card_type cards[], int id, int card_users[]) {
+    int card_index = 0;
+    while (id != cards[card_index].card_id) {
+        card_index++;
+    }
+    
+    int user_index = 0;
+    while (cards[card_index].card_users[user_index] != 0) {
+        card_users[user_index] = cards[card_index].card_users[user_index];
+        user_index++;
+    }
+    
+    return( user_index );
+}
+
 
 /*
  * Name: add_user_to_card(card_type cards[], int index, int card_id, int user_id)

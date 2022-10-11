@@ -42,7 +42,8 @@ int export_lists(char const filename[], list_type lists[], int index);
 int add_list(list_type lists[], int index, int id, char desc[]);
 int update_list(list_type lists[], int index, int id, char desc[]);
 int archive_list(list_type lists[], int *index, int id);
-void display_list(list_type lists[], card_type cards[], user_type users[], int id);
+void display_list(list_type lists[], int id);
+int get_list_cards(list_type lists[], int id, int list_cards[]);
 int add_card_to_list(list_type lists[], int index, int b_id, int c_id);
 int remove_card_from_list(list_type lists[], int index, int b_id, int c_id);
 
@@ -51,7 +52,8 @@ int export_cards(char const filename[], card_type cards[], int index);
 int add_card(card_type cards[], int index, int id, char desc[], int user, priority_level priority);
 int update_card(card_type cards[], int index, int id, char desc[], priority_level priority);
 int archive_card(card_type cards[], int *index, int id);
-void display_card(card_type cards[], user_type users[], int id);
+void display_card(card_type cards[], int id);
+int get_card_users(card_type cards[], int id, int card_users[]);
 int add_user_to_card(card_type cards[], int index, int c_id, int u_id);
 int remove_user_from_card(card_type cards[], int index, int c_id, int u_id);
 

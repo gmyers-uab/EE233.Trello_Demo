@@ -30,6 +30,11 @@ int main(int argc, char** argv) {
     int users_index = 0;
     int index;
     
+    int list_cards[card_count_max];
+    int list_cards_count = 0;
+    int card_users[user_count_max];
+    int card_users_count = 0;
+    
     import_lists(lists, &lists_index);
     import_cards(cards, &cards_index);
     import_users(users, &users_index);
@@ -38,7 +43,7 @@ int main(int argc, char** argv) {
     printf("cards_index = %i\n", cards_index);
     printf("users_index = %i\n", users_index);
     
-    printf("Argument count: %d\n", argc );
+    printf("\nArgument count: %d\n", argc );
     for (index = 0; index < argc; index++) {
         printf("argv[ %d ]: %s\n", index, argv[ index ]);
     }
@@ -80,7 +85,21 @@ int main(int argc, char** argv) {
             results = archive_list(lists, &lists_index, atoi(argv[3]));
         } else if ((argc == 4) && (strcmpi(argv[2], "/display") == 0)) {
             printf("Displaying list\n");
-            display_list(lists, cards, users, atoi(argv[3]));
+            printf("\n===========================================\n");
+            display_list(lists, atoi(argv[3]));
+            list_cards_count = get_list_cards(lists, atoi(argv[3]), list_cards);
+            int list_cards_index = 0;
+            for(list_cards_index = 0; list_cards_index < list_cards_count; list_cards_index++) {
+                printf("\n-------------------------------------------\n");
+                display_card(cards, list_cards[list_cards_index]);
+                card_users_count = get_card_users(cards, list_cards[list_cards_index], card_users);
+                int card_users_index = 0;
+                for(card_users_index = 0; card_users_index < card_users_count; card_users_index++) {
+                    display_user(users, card_users[card_users_index]);
+                }
+            }
+            printf("===========================================\n");
+            
         } else {
             printf("Incorrect arguments. Displaying help.\n");
             help();
@@ -122,7 +141,7 @@ int main(int argc, char** argv) {
             results = archive_card(cards, &cards_index, atoi(argv[3]));
         } else if ((argc == 4) && (strcmpi(argv[2], "/display") == 0)) {
             printf("Display card\n");
-            display_card(cards, users, atoi(argv[3]));
+            display_card(cards, atoi(argv[3]));
         } else {
             printf("Incorrect arguments. Displaying help.\n");
             help();
